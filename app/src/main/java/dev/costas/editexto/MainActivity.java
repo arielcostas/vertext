@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
@@ -84,16 +85,34 @@ public class MainActivity extends AppCompatActivity {
         String action = intent.getAction();
         String type = intent.getType();
 
-        List<String> openingOptions = new ArrayList<String>();
-        openingOptions.add(Intent.ACTION_SEND);
-        openingOptions.add(Intent.ACTION_VIEW);
-        openingOptions.add(Intent.ACTION_EDIT);
+        switch(action) {
+            case Intent.ACTION_EDIT:
+            case Intent.ACTION_VIEW:
+                String entrada = intent.getStringExtra(Intent.EXTRA_TEXT);
+                setWebViewContent(Html.escapeHtml(entrada));
+            case Intent.ACTION_SEND:
+                Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                String text = intent.getStringExtra(Intent.EXTRA_TEXT);
 
-        if (openingOptions.contains(action) && type != null) {
-            String entrada = intent.getStringExtra(Intent.EXTRA_TEXT);
-            setWebViewContent(Html.escapeHtml(entrada));
-        } else {
-            clearWebViewContent();
+                if (uri != null) {
+                    try {
+                        AssetFileDescriptor afd =  getContentResolver().openTypedAssetFileDescriptor(uri, type, null);
+                        StringBuilder sb =  new StringBuilder();
+                        Scanner scanner = new Scanner(afd.createInputStream());
+                        while(scanner.hasNextLine()) {
+                            sb.append(scanner.nextLine() + "\n");
+                        }
+                        setWebViewContent(sb.toString());
+                    } catch (FileNotFoundException e) {
+                        setWebViewContent(e.getStackTrace().toString());
+                        return;
+                    } catch (IOException e) {
+                        setWebViewContent(e.getStackTrace().toString());
+                        return;
+                    }
+                } else {
+                    setWebViewContent(text);
+                }
         }
     }
 
