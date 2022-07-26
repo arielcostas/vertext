@@ -1,4 +1,4 @@
-package dev.costas.editexto;
+package dev.costas.vertext;
 
 import android.content.Context;
 

@@ -1,40 +1,24 @@
-package dev.costas.editexto;
+package dev.costas.vertext;
+
+import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.Html;
+import android.util.Base64;
+import android.webkit.WebView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.ContentResolver;
-import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
-import android.renderscript.ScriptGroup;
-import android.text.Editable;
-import android.text.Html;
-import android.text.TextWatcher;
-import android.util.Base64;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.webkit.WebView;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,9 +40,6 @@ public class MainActivity extends AppCompatActivity {
                         while (scanner.hasNextLine()) {
                             sb.append(scanner.nextLine() + "\n");
                         }
-                    } catch (FileNotFoundException e) {
-                        setWebViewContent(e.getStackTrace().toString());
-                        return;
                     } catch (IOException e) {
                         setWebViewContent(e.getStackTrace().toString());
                         return;
@@ -75,9 +56,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         webView = (WebView) findViewById(R.id.vistaweb);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
+        
+        ((FloatingActionButton) findViewById(R.id.fab)).setOnClickListener(v -> {
             openFile();
         });
 
@@ -90,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             case Intent.ACTION_VIEW:
                 String entrada = intent.getStringExtra(Intent.EXTRA_TEXT);
                 setWebViewContent(Html.escapeHtml(entrada));
+                break;
             case Intent.ACTION_SEND:
                 Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
                 String text = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -113,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     setWebViewContent(text);
                 }
+                break;
+            default:
+                clearWebViewContent();
         }
     }
 
