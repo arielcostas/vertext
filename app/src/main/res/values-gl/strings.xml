@@ -1,0 +1,7 @@
+<resources>
+    <string name="button_open">Abrir ficheiro</string>
+    <string name="button_theme">Alternar modo claro/escuro</string>
+
+    <string name="file_unknown">Descoñecido</string>
+    <string name="none_open">Pulsa ⋮  para abrir un ficheiro</string>
+</resources>
