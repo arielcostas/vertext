@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">VerText</string>
+    <string name="button_open">Open File</string>
+    <string name="button_theme">Switch dark/light mode</string>
+
+    <string name="file_unknown">Unknown</string>
+    <string name="none_open">Press ⋮  to open a file</string>
 </resources>

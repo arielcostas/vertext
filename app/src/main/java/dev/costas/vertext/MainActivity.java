@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void clearWebViewContent() {
-        String contenido = "<html><head><style>" + getStyle() + "</style></head><body><i>Ningún archivo abierto</i></body></html>";
+        String contenido = "<html><head><style>" + getStyle() + "</style></head><body><i>" + getString(R.string.none_open) + "</i></body></html>";
         String encoded = Base64.encodeToString(contenido.getBytes(), Base64.NO_PADDING);
         webView.loadData(encoded, "text/html", "base64");
     }
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
     public String getFilenameFromUri(Uri uri) {
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
         if (cursor == null) {
-            return "Desconocido"; // TODO: Translations
+            return getString(R.string.file_unknown);
         }
 
         int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
