@@ -1,10 +1,13 @@
 package dev.costas.vertext;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.OpenableColumns;
 import android.text.Html;
 import android.util.Base64;
@@ -17,6 +20,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -28,6 +32,8 @@ import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
     private WebView webView;
+    private String LIGHT_STYLE = "body { background-color: white; color: black; }";
+    private String DARK_STYLE = "body { background-color: black; color: white; }";
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -37,6 +43,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        switch(item.getItemId()) {
+            case R.id.mainmenu_abrir:
+                openFile();
+                break;
+            case R.id.mainmenu_theme:
+                SharedPreferences sharedPreferences = getSharedPreferences("dev.costas.vertext", MODE_PRIVATE);
+                SharedPreferences.Editor editor =  sharedPreferences.edit();
+                String mode =   sharedPreferences.getString("mode", "light");
+                if (mode.equals("light")) {
+                    editor.putString("mode", "dark").commit();
+                } else {
+                    editor.putString("mode", "light").commit();
+                }
+                refreshView();
+                break;
+        }
         if (id == R.id.mainmenu_abrir) {
             openFile();
         }
@@ -130,14 +152,28 @@ public class MainActivity extends AppCompatActivity {
         mStartForResult.launch(intent);
     }
 
+    private String currentContent;
+
     private void setWebViewContent(CharSequence innerContent) {
-        String noncoded = "<html><body><pre>" + innerContent + "</pre></body></html>";
+
+
+        String noncoded = "<html><head><style>" + getStyle() + "</style></head><body><pre>" + innerContent + "</pre></body></html>";
         String encoded = Base64.encodeToString(noncoded.getBytes(), Base64.NO_PADDING);
         webView.loadData(encoded, "text/html", "base64");
+        this.currentContent = innerContent.toString();
+    }
+
+    private void refreshView() {
+        if (currentContent == null) {
+            clearWebViewContent();
+        } else {
+            setWebViewContent(currentContent);
+
+        }
     }
 
     private void clearWebViewContent() {
-        String contenido = "<html><body><i>Ningún archivo abierto</i></body></html>";
+        String contenido = "<html><head><style>" + getStyle() + "</style></head><body><i>Ningún archivo abierto</i></body></html>";
         String encoded = Base64.encodeToString(contenido.getBytes(), Base64.NO_PADDING);
         webView.loadData(encoded, "text/html", "base64");
     }
@@ -153,5 +189,13 @@ public class MainActivity extends AppCompatActivity {
         String name = cursor.getString(nameIndex);
         cursor.close();
         return name;
+    }
+
+    private String getStyle() {
+        String mode = getSharedPreferences("dev.costas.vertext", MODE_PRIVATE).getString("mode", "light");
+        if (mode.equals("dark")) {
+            return DARK_STYLE;
+        }
+        return LIGHT_STYLE;
     }
 }

@@ -5,4 +5,9 @@
         android:icon="@android:drawable/ic_menu_search"
         android:title="Abrir"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/mainmenu_theme"
+        android:icon="@android:drawable/ic_menu_day"
+        android:title="Tema oscuro"
+        app:showAsAction="never" />
 </menu>
