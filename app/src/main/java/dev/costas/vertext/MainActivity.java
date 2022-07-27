@@ -32,8 +32,9 @@ import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
     private WebView webView;
-    private String LIGHT_STYLE = "body { background-color: white; color: black; }";
-    private String DARK_STYLE = "body { background-color: black; color: white; }";
+    private String COMMON_STYLE = "pre {font-size: 14px;}";
+    private String LIGHT_STYLE = COMMON_STYLE + " body { background-color: white; color: black; }";
+    private String DARK_STYLE = COMMON_STYLE + "body { background-color: black; color: white; }";
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,9 +59,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 refreshView();
                 break;
-        }
-        if (id == R.id.mainmenu_abrir) {
-            openFile();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -155,8 +153,6 @@ public class MainActivity extends AppCompatActivity {
     private String currentContent;
 
     private void setWebViewContent(CharSequence innerContent) {
-
-
         String noncoded = "<html><head><style>" + getStyle() + "</style></head><body><pre>" + innerContent + "</pre></body></html>";
         String encoded = Base64.encodeToString(noncoded.getBytes(), Base64.NO_PADDING);
         webView.loadData(encoded, "text/html", "base64");
