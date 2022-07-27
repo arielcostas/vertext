@@ -3,5 +3,6 @@
     <string name="button_theme">Alternar modo claro/escuro</string>
 
     <string name="file_unknown">Descoñecido</string>
+    <string name="file_shared">Compartido</string>
     <string name="none_open">Pulsa ⋮  para abrir un ficheiro</string>
 </resources>

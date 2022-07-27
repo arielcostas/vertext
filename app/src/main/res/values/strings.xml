@@ -3,5 +3,6 @@
     <string name="button_theme">Switch dark/light mode</string>
 
     <string name="file_unknown">Unknown</string>
+    <string name="file_shared">Shared</string>
     <string name="none_open">Press ⋮  to open a file</string>
 </resources>
