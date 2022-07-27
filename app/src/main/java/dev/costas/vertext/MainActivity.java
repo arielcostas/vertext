@@ -1,22 +1,21 @@
 package dev.costas.vertext;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.text.Html;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,18 +23,18 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
-	private WebView webView;
 	private TextView principal;
 
-	private String currentContent;
+	private String currentTitle = "";
+	private String currentContent = "";
 
 	private final String COMMON_STYLE = "pre {font-size: 14px;}";
 	private final String LIGHT_STYLE = COMMON_STYLE + " body { background-color: white; color: black; }";
 	private final String DARK_STYLE = COMMON_STYLE + "body { background-color: black; color: white; }";
 
 	/*
-	*  MENU
-	*/
+	 *  MENU
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.mainmenu, menu);
@@ -50,16 +49,14 @@ public class MainActivity extends AppCompatActivity {
 				openFile();
 				break;
 			case R.id.mainmenu_theme:
-				SharedPreferences sharedPreferences = getSharedPreferences("dev.costas.vertext", MODE_PRIVATE);
-				SharedPreferences.Editor editor = sharedPreferences.edit();
-				String mode = sharedPreferences.getString("mode", "light");
-				if (mode.equals("light")) {
-					editor.putString("mode", "dark").commit();
+				int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+				if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+					getPreferences(MODE_PRIVATE).edit().putBoolean("useDarkMode", false).commit();
+					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 				} else {
-					editor.putString("mode", "light").commit();
+					getPreferences(MODE_PRIVATE).edit().putBoolean("useDarkMode", true).commit();
+					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 				}
-				refreshView();
-				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -81,23 +78,38 @@ public class MainActivity extends AppCompatActivity {
 							sb.append("\n");
 						}
 					} catch (IOException e) {
-						setWebViewContent(Arrays.toString(e.getStackTrace()));
+						setContent(Arrays.toString(e.getStackTrace()));
 						return;
 					}
 
 					setTitle(getFilenameFromUri(fileUri));
-					setWebViewContent(sb.toString());
+					setContent(sb.toString());
 				}
 			}
 	);
+
+	protected void onSaveInstanceState(Bundle bundle) {
+		super.onSaveInstanceState(bundle);
+		bundle.putString("currentTitle", currentTitle);
+		bundle.putString("currentContent", currentContent);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		webView = (WebView) findViewById(R.id.vistaweb);
 		principal = (TextView) findViewById(R.id.principal);
+		principal.setHorizontallyScrolling(true);
 
+		// Dark mode
+		boolean isDarkMode = getPreferences(MODE_PRIVATE).getBoolean("useDarkMode", false);
+		if (isDarkMode) {
+			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+		} else {
+			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+		}
+
+		// Handle intents
 		Intent intent = getIntent();
 		String action = intent.getAction();
 		String type = intent.getType();
@@ -110,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 				String entrada = intent.getStringExtra(Intent.EXTRA_TEXT);
 				uri = Uri.parse(intent.getStringExtra(Intent.EXTRA_ORIGINATING_URI));
 				setTitle(getFilenameFromUri(uri));
-				setWebViewContent(Html.escapeHtml(entrada));
+				setContent(Html.escapeHtml(entrada));
 				break;
 			case Intent.ACTION_SEND:
 				uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
@@ -126,18 +138,29 @@ public class MainActivity extends AppCompatActivity {
 							sb.append(scanner.nextLine() + "\n");
 							sb.append("\n");
 						}
-						setWebViewContent(sb.toString());
+						setContent(sb.toString());
 					} catch (IOException e) {
-						setWebViewContent(Arrays.toString(e.getStackTrace()));
+						setContent(Arrays.toString(e.getStackTrace()));
 						return;
 					}
 				} else {
 					setTitle(getString(R.string.file_shared));
-					setWebViewContent(text);
+					setContent(text);
 				}
 				break;
 			default:
-				clearWebViewContent();
+				// On setting dark mode or rotating screen
+				if (savedInstanceState != null) {
+					String content = savedInstanceState.getString("currentContent");
+					if (content == "") {
+						clearContent();
+					} else {
+						setTitle(savedInstanceState.getString("currentTitle"));
+						setContent(content);
+					}
+				} else { // Started from scrach
+					clearContent();
+				}
 		}
 	}
 
@@ -147,26 +170,17 @@ public class MainActivity extends AppCompatActivity {
 		mStartForResult.launch(intent);
 	}
 
-	private void setWebViewContent(CharSequence innerContent) {
-		String raw = "<html><head><style>" + getStyle() + "</style></head><body><pre>" + innerContent + "</pre></body></html>";
-		String encoded = Base64.encodeToString(raw.getBytes(), Base64.NO_PADDING);
-		webView.loadData(encoded, "text/html", "base64");
+	private void setContent(CharSequence innerContent) {
+		principal.setText(innerContent.toString().replaceAll("\t", "    "));
+		principal.setLines(innerContent.toString().split("\n").length);
 		this.currentContent = innerContent.toString();
 	}
 
-	private void clearWebViewContent() {
-		String contenido = "<html><head><style>" + getStyle() + "</style></head><body><i>" + getString(R.string.none_open) + "</i></body></html>";
-		String encoded = Base64.encodeToString(contenido.getBytes(), Base64.NO_PADDING);
-		webView.loadData(encoded, "text/html", "base64");
-	}
-
-	private void refreshView() {
-		if (currentContent == null) {
-			clearWebViewContent();
-		} else {
-			setWebViewContent(currentContent);
-
-		}
+	private void clearContent() {
+		principal.setText(getString(R.string.none_open));
+		principal.setLines(1);
+		currentContent = "";
+		currentTitle = "";
 	}
 
 	public String getFilenameFromUri(Uri uri) {
@@ -182,16 +196,14 @@ public class MainActivity extends AppCompatActivity {
 		return name;
 	}
 
-	private String getStyle() {
-		String mode = getSharedPreferences("dev.costas.vertext", MODE_PRIVATE).getString("mode", "light");
-		if (mode.equals("dark")) {
-			return DARK_STYLE;
-		}
-		return LIGHT_STYLE;
-	}
-
 	@Override
 	public void setTitle(CharSequence title) {
-		super.setTitle(title + " - VerText");
+		if (title == null || title == "") {
+			this.currentTitle = "";
+			super.setTitle("VerText");
+		} else {
+			this.currentTitle = title.toString();
+			super.setTitle(title + " - VerText");
+		}
 	}
 }
