@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 						StringBuilder sb = new StringBuilder();
 						Scanner scanner = new Scanner(afd.createInputStream());
 						while (scanner.hasNextLine()) {
-							sb.append(scanner.nextLine() + "\n");
+							sb.append(scanner.nextLine());
 							sb.append("\n");
 						}
 						setContent(sb.toString());
