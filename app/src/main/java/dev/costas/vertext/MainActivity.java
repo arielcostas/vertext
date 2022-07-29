@@ -28,10 +28,6 @@ public class MainActivity extends AppCompatActivity {
 	private String currentTitle = "";
 	private String currentContent = "";
 
-	private final String COMMON_STYLE = "pre {font-size: 14px;}";
-	private final String LIGHT_STYLE = COMMON_STYLE + " body { background-color: white; color: black; }";
-	private final String DARK_STYLE = COMMON_STYLE + "body { background-color: black; color: white; }";
-
 	/*
 	 *  MENU
 	 */
