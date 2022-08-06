@@ -1,5 +1,6 @@
 package dev.costas.vertext;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
@@ -16,6 +17,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.view.menu.MenuBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,8 +33,12 @@ public class MainActivity extends AppCompatActivity {
 	/*
 	 *  MENU
 	 */
+	@SuppressLint("RestrictedApi")
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		if (menu instanceof MenuBuilder) {
+			((MenuBuilder) menu).setOptionalIconsVisible(true);
+		}
 		getMenuInflater().inflate(R.menu.mainmenu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}

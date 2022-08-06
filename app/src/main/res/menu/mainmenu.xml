@@ -2,12 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/mainmenu_abrir"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/ic_openfile_24"
         android:title="@string/button_open"
         app:showAsAction="never" />
     <item
         android:id="@+id/mainmenu_theme"
-        android:icon="@android:drawable/ic_menu_day"
+        android:icon="@drawable/ic_sun_24"
         android:title="@string/button_theme"
         app:showAsAction="never" />
 </menu>
