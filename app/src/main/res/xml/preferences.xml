@@ -9,6 +9,8 @@
 			android:entryValues="@array/settings_theme_options_keys"
 			app:defaultValue="0"
 			app:key="theme"
-			app:title="@string/settings_theme_title" />
+			app:icon="@drawable/ic_sun_24"
+			app:title="@string/settings_theme_title"
+			android:summary="%s" />
 	</PreferenceCategory>
 </PreferenceScreen>

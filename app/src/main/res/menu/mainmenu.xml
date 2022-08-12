@@ -12,7 +12,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/mainmenu_settings"
-        android:icon="@android:drawable/ic_menu_preferences"
+        android:icon="@drawable/ic_settings_24"
         android:title="Preferences"
         app:showAsAction="never"/>
 </menu>
