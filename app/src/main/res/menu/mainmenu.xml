@@ -4,7 +4,7 @@
         android:id="@+id/mainmenu_abrir"
         android:icon="@drawable/ic_openfile_24"
         android:title="@string/button_open"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/mainmenu_theme"
         android:icon="@drawable/ic_sun_24"

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="button_open">Abrir ficheiro</string>
+    <string name="button_theme">Alternar modo escuro/claro</string>
+    <string name="file_unknown">Descoñecido</string>
+    <string name="file_shared">Compartido</string>
+    <string name="none_open">Preme ⋮ para abrir un ficheiro</string>
+</resources>
