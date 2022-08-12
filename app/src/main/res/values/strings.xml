@@ -1,8 +1,18 @@
 <resources>
     <string name="button_open">Open File</string>
     <string name="button_theme">Switch dark/light mode</string>
+    <string name="button_settings">Open settings</string>
 
     <string name="file_unknown">Unknown</string>
     <string name="file_shared">Shared</string>
     <string name="none_open">Press ⋮  to open a file</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_category_ui">User interface</string>
+
+    <string name="settings_theme_title">Theme</string>
+    <string name="setting_theme_system">System default</string>
+    <string name="setting_theme_light">Light</string>
+    <string name="setting_theme_dark">Dark</string>
+
 </resources>

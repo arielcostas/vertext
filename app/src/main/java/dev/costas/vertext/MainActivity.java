@@ -5,10 +5,11 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
 
 import dev.costas.vertext.fragments.MainFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentChangeListener {
 	public MainActivity() {
 		super(R.layout.activity_main);
 	}
@@ -30,5 +31,13 @@ public class MainActivity extends AppCompatActivity {
 					.add(R.id.fragment_container_view, MainFragment.class, savedInstanceState)
 					.commit();
 		}
+	}
+
+	@Override
+	public void setFragment(Fragment fragment) {
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.fragment_container_view, fragment, fragment.toString())
+				.addToBackStack(fragment.toString())
+				.commit();
 	}
 }

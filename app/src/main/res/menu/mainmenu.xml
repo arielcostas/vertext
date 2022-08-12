@@ -10,4 +10,9 @@
         android:icon="@drawable/ic_sun_24"
         android:title="@string/button_theme"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/mainmenu_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="Preferences"
+        app:showAsAction="never"/>
 </menu>

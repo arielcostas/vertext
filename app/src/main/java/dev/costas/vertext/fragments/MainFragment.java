@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import dev.costas.vertext.FragmentChangeListener;
 import dev.costas.vertext.R;
 import dev.costas.vertext.viewmodels.ContentViewModel;
 
@@ -53,7 +54,7 @@ public class MainFragment extends Fragment {
 		textView = view.findViewById(R.id.principal);
 		activity = (AppCompatActivity) getActivity();
 
-		((MaterialToolbar)view.findViewById(R.id.main_toolbar)).setOnMenuItemClickListener(item -> {
+		((MaterialToolbar) view.findViewById(R.id.main_toolbar)).setOnMenuItemClickListener(item -> {
 			if (item.getItemId() == R.id.mainmenu_abrir) {
 				openFile();
 				return true;
@@ -67,6 +68,11 @@ public class MainFragment extends Fragment {
 					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 				}
 				return true;
+			} else if (item.getItemId() == R.id.mainmenu_settings) {
+				Fragment sf = new SettingsFragment();
+				FragmentChangeListener fc = (FragmentChangeListener) getActivity();
+				fc.setFragment(sf);
+				return false;
 			} else {
 				return false;
 			}
@@ -118,7 +124,7 @@ public class MainFragment extends Fragment {
 				Log.d("main", "titulo \"" + title + "\"");
 				if (
 						title == null || title.isEmpty() || title.trim().isEmpty() ||
-						content == null || content.isEmpty() || content.trim().isEmpty()
+								content == null || content.isEmpty() || content.trim().isEmpty()
 				) {
 					clearView();
 				} else {

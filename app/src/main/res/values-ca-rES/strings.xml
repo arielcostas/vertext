@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="button_open">Obrir arxiu</string>
-    <string name="button_theme">Canvia el mode fosc/llum</string>
-    <string name="file_unknown">Desconegut</string>
-    <string name="file_shared">Compartit</string>
-    <string name="none_open">Premeu ⋮ per obrir un fitxer</string>
-</resources>
