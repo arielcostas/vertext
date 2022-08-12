@@ -1,15 +1,8 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="Theme.VerText" parent="Theme.Material3.DayNight">
-        <!-- Primary brand color. -->
+    <style name="Theme.VerText" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/primary_darker</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <item name="android:textColor">@color/black</item>
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@color/primary_darker</item>
     </style>
 </resources>
