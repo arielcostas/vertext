@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string-array name="settings_theme_options_keys">
-		<item>0</item>
-		<item>1</item>
-		<item>2</item>
+	<string-array name="settings_theme_options_values">
+		<item>MODE_NIGHT_FOLLOW_SYSTEM</item>
+		<item>MODE_NIGHT_NO</item>
+		<item>MODE_NIGHT_YES</item>
 	</string-array>
 
-	<string-array name="settings_theme_options_values">
+	<string-array name="settings_theme_options_entries">
 		<item>@string/setting_theme_system</item>
 		<item>@string/setting_theme_light</item>
 		<item>@string/setting_theme_dark</item>

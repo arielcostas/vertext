@@ -5,12 +5,12 @@
 		app:key="category_ui"
 		app:title="@string/settings_category_ui">
 		<ListPreference
-			android:entries="@array/settings_theme_options_values"
-			android:entryValues="@array/settings_theme_options_keys"
-			app:defaultValue="0"
+			android:entries="@array/settings_theme_options_entries"
+			android:entryValues="@array/settings_theme_options_values"
+			app:defaultValue="MODE_NIGHT_FOLLOW_SYSTEM"
 			app:key="theme"
 			app:icon="@drawable/ic_sun_24"
 			app:title="@string/settings_theme_title"
-			android:summary="%s" />
+			app:useSimpleSummaryProvider="true" />
 	</PreferenceCategory>
 </PreferenceScreen>

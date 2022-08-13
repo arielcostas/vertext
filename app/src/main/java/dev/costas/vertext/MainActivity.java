@@ -1,11 +1,13 @@
 package dev.costas.vertext;
 
-import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import dev.costas.vertext.fragments.MainFragment;
 
@@ -17,15 +19,24 @@ public class MainActivity extends AppCompatActivity implements FragmentChangeLis
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		boolean useDarkMode = getPreferences(Context.MODE_PRIVATE).getBoolean("useDarkMode", false);
-		boolean currentDarkMode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
-
-		if (useDarkMode != currentDarkMode) {
-			AppCompatDelegate.setDefaultNightMode(useDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-		}
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		Log.d("Create", "mode: " + sharedPreferences.getString("theme", "NONE"));
 
 		if (savedInstanceState == null) {
+			switch(sharedPreferences.getString("theme", "MODE_NIGHT_FOLLOW_SYSTEM")) {
+				case "MODE_NIGHT_FOLLOW_SYSTEM":
+					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+					break;
+				case "MODE_NIGHT_NO":
+					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+					break;
+				case "MODE_NIGHT_YES":
+					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+					break;
+				default:
+					Log.e("activityOnCreate", "unexpected mode option " + sharedPreferences.getString("theme", ""));
+			}
+
 			getSupportFragmentManager().beginTransaction()
 					.setReorderingAllowed(true)
 					.add(R.id.fragment_container_view, MainFragment.class, savedInstanceState)

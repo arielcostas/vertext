@@ -1,16 +1,13 @@
 package dev.costas.vertext.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,7 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -57,16 +53,6 @@ public class MainFragment extends Fragment {
 		((MaterialToolbar) view.findViewById(R.id.main_toolbar)).setOnMenuItemClickListener(item -> {
 			if (item.getItemId() == R.id.mainmenu_abrir) {
 				openFile();
-				return true;
-			} else if (item.getItemId() == R.id.mainmenu_theme) {
-				int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-				if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
-					activity.getPreferences(Context.MODE_PRIVATE).edit().putBoolean("useDarkMode", false).commit();
-					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-				} else {
-					activity.getPreferences(Context.MODE_PRIVATE).edit().putBoolean("useDarkMode", true).commit();
-					AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-				}
 				return true;
 			} else if (item.getItemId() == R.id.mainmenu_settings) {
 				Fragment sf = new SettingsFragment();
@@ -121,7 +107,6 @@ public class MainFragment extends Fragment {
 				ContentViewModel contentViewModel = new ViewModelProvider(activity).get(ContentViewModel.class);
 				String title = contentViewModel.getTitle();
 				String content = contentViewModel.getContent();
-				Log.d("main", "titulo \"" + title + "\"");
 				if (
 						title == null || title.isEmpty() || title.trim().isEmpty() ||
 								content == null || content.isEmpty() || content.trim().isEmpty()

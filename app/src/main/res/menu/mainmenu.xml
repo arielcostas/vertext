@@ -3,16 +3,11 @@
     <item
         android:id="@+id/mainmenu_abrir"
         android:icon="@drawable/ic_openfile_24"
-        android:title="@string/button_open"
+        android:title="@string/menu_openfile"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/mainmenu_theme"
-        android:icon="@drawable/ic_sun_24"
-        android:title="@string/button_theme"
-        app:showAsAction="never" />
     <item
         android:id="@+id/mainmenu_settings"
         android:icon="@drawable/ic_settings_24"
-        android:title="Preferences"
-        app:showAsAction="never"/>
+        android:title="@string/menu_settings"
+        app:showAsAction="ifRoom"/>
 </menu>
