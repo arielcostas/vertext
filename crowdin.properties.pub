@@ -1,0 +1,7 @@
+# For the public repository, not containing the API token required to upload/download translations
+project-id=532152
+api-token=
+files.source=**/values/strings.xml
+files.translation=/values-%two_letters_code%/%original_file_name%
+disable-branches=true
+auto-upload=false
