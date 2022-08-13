@@ -4,7 +4,6 @@
     <string name="menu_openfile">Abrir arquivo</string>
     <string name="menu_settings">Axustes</string>
     <string name="file_unknown">Descoñecido</string>
-    <string name="file_shared">Compartido</string>
     <string name="none_open">Preme o icono enriba á dereita para abrir un arquivo.</string>
     <!-- SettingsFragment -->
     <string name="settings_title">Axustes</string>

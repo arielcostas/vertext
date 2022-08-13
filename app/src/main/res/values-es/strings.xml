@@ -4,7 +4,6 @@
     <string name="menu_openfile">Abrir archivo</string>
     <string name="menu_settings">Ajustes</string>
     <string name="file_unknown">Desconocido</string>
-    <string name="file_shared">Compartido</string>
     <string name="none_open">Pulsa el icono superior derecho para abrir un archivo.</string>
     <!-- SettingsFragment -->
     <string name="settings_title">Ajustes</string>

@@ -99,7 +99,7 @@ public class MainFragment extends Fragment {
 						return;
 					}
 				} else {
-					setTitle(getString(R.string.file_shared));
+					setTitle(getString(R.string.file_unknown));
 					setContent(text);
 				}
 				break;
