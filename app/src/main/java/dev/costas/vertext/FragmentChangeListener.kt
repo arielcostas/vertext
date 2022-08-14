@@ -1,7 +1,7 @@
-package dev.costas.vertext;
+package dev.costas.vertext
 
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.Fragment
 
-public interface FragmentChangeListener {
-	public void setFragment(Fragment fragment);
+interface FragmentChangeListener {
+    fun setFragment(fragment: Fragment?)
 }

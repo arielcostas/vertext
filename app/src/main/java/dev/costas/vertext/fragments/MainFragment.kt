@@ -1,202 +1,170 @@
-package dev.costas.vertext.fragments;
+package dev.costas.vertext.fragments
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.OpenableColumns;
-import android.text.Html;
-import android.view.View;
-import android.widget.TextView;
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.provider.OpenableColumns
+import android.text.Html
+import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.appbar.MaterialToolbar
+import dev.costas.vertext.FragmentChangeListener
+import dev.costas.vertext.R
+import dev.costas.vertext.viewmodels.ContentViewModel
+import java.io.IOException
+import java.io.InputStream
+import java.util.*
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+class MainFragment : Fragment(R.layout.fragment_main) {
+    private var textView: TextView? = null
 
-import com.google.android.material.appbar.MaterialToolbar;
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        textView = view.findViewById(R.id.principal)
+        (view.findViewById<View>(R.id.main_toolbar) as MaterialToolbar).setOnMenuItemClickListener { item: MenuItem ->
+            if (item.itemId == R.id.mainmenu_abrir) {
+                openFile()
+                return@setOnMenuItemClickListener true
+            } else if (item.itemId == R.id.mainmenu_settings) {
+                val sf: Fragment = SettingsFragment()
+                val fc = getActivity() as FragmentChangeListener?
+                fc!!.setFragment(sf)
+                return@setOnMenuItemClickListener false
+            } else {
+                return@setOnMenuItemClickListener false
+            }
+        }
+        val intent = requireActivity().intent
+        val action = intent.action
+        val type = intent.type
+        val uri: Uri?
+        when (action) {
+            Intent.ACTION_EDIT, Intent.ACTION_VIEW -> {
+                val entrada = intent.getStringExtra(Intent.EXTRA_TEXT)
+                uri = Uri.parse(intent.getStringExtra(Intent.EXTRA_ORIGINATING_URI))
+                setTitle(getFilenameFromUri(uri))
+                setContent(Html.escapeHtml(entrada))
+            }
+            Intent.ACTION_SEND -> {
+                uri = intent.getParcelableExtra(Intent.EXTRA_STREAM)
+                val text = intent.getStringExtra(Intent.EXTRA_TEXT)
+                if (uri != null) {
+                    try {
+                        setTitle(getFilenameFromUri(uri))
+                        val afd = requireActivity().contentResolver.openTypedAssetFileDescriptor(
+                            uri,
+                            type!!,
+                            null
+                        )
+                        val sb = StringBuilder()
+                        val scanner = Scanner(afd!!.createInputStream())
+                        while (scanner.hasNextLine()) {
+                            sb.append(scanner.nextLine())
+                            sb.append("\n")
+                        }
+                        setContent(sb.toString())
+                    } catch (e: IOException) {
+                        setContent(Arrays.toString(e.stackTrace))
+                        return
+                    }
+                } else {
+                    setTitle(getString(R.string.file_unknown))
+                    setContent(text!!)
+                }
+            }
+            else -> {
+                val contentViewModel =
+                    ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+                val title = contentViewModel.title
+                val content = contentViewModel.content
+                if (title.isEmpty() || title.trim { it <= ' ' }
+                        .isEmpty() || content.isEmpty() || content.trim { it <= ' ' }.isEmpty()) {
+                    clearView()
+                } else {
+                    setToolbarTitle("$title - VerText")
+                    setTextviewContent(content)
+                }
+            }
+        }
+    }
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Scanner;
+    private fun openFile() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.type = "text/*"
+        mStartForResult.launch(intent)
+    }
 
-import dev.costas.vertext.FragmentChangeListener;
-import dev.costas.vertext.R;
-import dev.costas.vertext.viewmodels.ContentViewModel;
+    var mStartForResult = registerForActivityResult<Intent, ActivityResult>(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data!!
+            val fileUri = data.data
+            val `is`: InputStream?
+            val sb = StringBuilder()
+            try {
+                `is` = requireActivity().contentResolver.openInputStream(fileUri!!)
+                val scanner = Scanner(`is`)
+                while (scanner.hasNextLine()) {
+                    sb.append(scanner.nextLine())
+                    sb.append("\n")
+                }
+            } catch (e: IOException) {
+                setContent(Arrays.toString(e.stackTrace))
+                return@registerForActivityResult
+            }
+            setTitle(getFilenameFromUri(fileUri))
+            setContent(sb.toString())
+        }
+    }
 
-public class MainFragment extends Fragment {
-	private TextView textView;
-	private AppCompatActivity activity;
+    fun getFilenameFromUri(uri: Uri?): String {
+        val cursor = requireActivity().contentResolver.query(uri!!, null, null, null, null)
+            ?: return getString(R.string.file_unknown)
+        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        cursor.moveToFirst()
+        val name = cursor.getString(nameIndex)
+        cursor.close()
+        return name
+    }
 
-	public MainFragment() {
-		super(R.layout.fragment_main);
-	}
+    private fun setToolbarTitle(title: CharSequence) {
+        val toolbar = requireView().findViewById<MaterialToolbar>(R.id.main_toolbar)
+        toolbar.title = title
+    }
 
-	@Override
-	public void onCreate(@Nullable Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
+    fun setTitle(title: CharSequence) {
+        val contentViewModel =
+            ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        if (title === "") {
+            contentViewModel.title = ""
+            setToolbarTitle(requireContext().applicationInfo.name)
+        } else {
+            contentViewModel.title = title.toString()
+            setToolbarTitle("$title - VerText")
+        }
+    }
 
-	@Override
-	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
+    private fun setTextviewContent(content: CharSequence) {
+        textView!!.text = content.toString().replace("\t".toRegex(), "    ")
+        textView!!.setLines(content.toString().split("\n").toTypedArray().size)
+    }
 
-		textView = view.findViewById(R.id.principal);
-		activity = (AppCompatActivity) getActivity();
+    fun setContent(content: CharSequence) {
+        val contentViewModel =
+            ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        contentViewModel.content = content.toString()
+        setTextviewContent(content)
+    }
 
-		((MaterialToolbar) view.findViewById(R.id.main_toolbar)).setOnMenuItemClickListener(item -> {
-			if (item.getItemId() == R.id.mainmenu_abrir) {
-				openFile();
-				return true;
-			} else if (item.getItemId() == R.id.mainmenu_settings) {
-				Fragment sf = new SettingsFragment();
-				FragmentChangeListener fc = (FragmentChangeListener) getActivity();
-				fc.setFragment(sf);
-				return false;
-			} else {
-				return false;
-			}
-
-		});
-
-		Intent intent = activity.getIntent();
-		String action = intent.getAction();
-		String type = intent.getType();
-
-		Uri uri;
-
-		switch (action) {
-			case Intent.ACTION_EDIT:
-			case Intent.ACTION_VIEW:
-				String entrada = intent.getStringExtra(Intent.EXTRA_TEXT);
-				uri = Uri.parse(intent.getStringExtra(Intent.EXTRA_ORIGINATING_URI));
-				setTitle(getFilenameFromUri(uri));
-				setContent(Html.escapeHtml(entrada));
-				break;
-			case Intent.ACTION_SEND:
-				uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-				String text = intent.getStringExtra(Intent.EXTRA_TEXT);
-
-				if (uri != null) {
-					try {
-						setTitle(getFilenameFromUri(uri));
-						AssetFileDescriptor afd = activity.getContentResolver().openTypedAssetFileDescriptor(uri, type, null);
-						StringBuilder sb = new StringBuilder();
-						Scanner scanner = new Scanner(afd.createInputStream());
-						while (scanner.hasNextLine()) {
-							sb.append(scanner.nextLine());
-							sb.append("\n");
-						}
-						setContent(sb.toString());
-					} catch (IOException e) {
-						setContent(Arrays.toString(e.getStackTrace()));
-						return;
-					}
-				} else {
-					setTitle(getString(R.string.file_unknown));
-					setContent(text);
-				}
-				break;
-			default:
-				ContentViewModel contentViewModel = new ViewModelProvider(activity).get(ContentViewModel.class);
-				String title = contentViewModel.getTitle();
-				String content = contentViewModel.getContent();
-				if (
-						title == null || title.isEmpty() || title.trim().isEmpty() ||
-								content == null || content.isEmpty() || content.trim().isEmpty()
-				) {
-					clearView();
-				} else {
-					setToolbarTitle(title + " - VerText");
-					setTextviewContent(content);
-				}
-		}
-	}
-
-	private void openFile() {
-		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-		intent.setType("text/*");
-		mStartForResult.launch(intent);
-	}
-
-	ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(
-			new ActivityResultContracts.StartActivityForResult(),
-			result -> {
-				if (result.getResultCode() == Activity.RESULT_OK) {
-					Intent data = result.getData();
-					assert data != null;
-					Uri fileUri = data.getData();
-					InputStream is;
-					var sb = new StringBuilder();
-					try {
-						is = activity.getContentResolver().openInputStream(fileUri);
-						Scanner scanner = new Scanner(is);
-						while (scanner.hasNextLine()) {
-							sb.append(scanner.nextLine());
-							sb.append("\n");
-						}
-					} catch (IOException e) {
-						setContent(Arrays.toString(e.getStackTrace()));
-						return;
-					}
-
-					setTitle(getFilenameFromUri(fileUri));
-					setContent(sb.toString());
-				}
-			}
-	);
-
-	public String getFilenameFromUri(Uri uri) {
-		Cursor cursor = activity.getContentResolver().query(uri, null, null, null, null);
-		if (cursor == null) {
-			return getString(R.string.file_unknown);
-		}
-
-		int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-		cursor.moveToFirst();
-		String name = cursor.getString(nameIndex);
-		cursor.close();
-		return name;
-	}
-
-	private void setToolbarTitle(@NonNull CharSequence title) {
-		MaterialToolbar toolbar = getView().findViewById(R.id.main_toolbar);
-		toolbar.setTitle(title);
-	}
-
-	public void setTitle(@NonNull CharSequence title) {
-		ContentViewModel contentViewModel = new ViewModelProvider(activity).get(ContentViewModel.class);
-		if (title == "") {
-			contentViewModel.setTitle("");
-			setToolbarTitle(getContext().getApplicationInfo().name);
-		} else {
-			contentViewModel.setTitle(title.toString());
-			setToolbarTitle(title + " - VerText");
-		}
-	}
-
-	private void setTextviewContent(@NonNull CharSequence content) {
-		textView.setText(content.toString().replaceAll("\t", "    "));
-		textView.setLines(content.toString().split("\n").length);
-	}
-
-	public void setContent(@NonNull CharSequence content) {
-		ContentViewModel contentViewModel = new ViewModelProvider(activity).get(ContentViewModel.class);
-		contentViewModel.setContent(content.toString());
-
-		setTextviewContent(content);
-	}
-
-	private void clearView() {
-		setToolbarTitle("VerText");
-		setTextviewContent(getString(R.string.none_open));
-	}
-
-
+    private fun clearView() {
+        setToolbarTitle("VerText")
+        setTextviewContent(getString(R.string.none_open))
+    }
 }
