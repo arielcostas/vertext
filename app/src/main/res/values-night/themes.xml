@@ -7,5 +7,11 @@
 		<item name="android:statusBarColor">@color/primary_darker</item>
 
 		<item name="preferenceTheme">@style/Theme.VerTextPreferences</item>
+		<item name="alertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+		<item name="dialogCornerRadius">18dp</item>
+	</style>
+
+	<style name="Theme.VerTextPreferences" parent="@style/PreferenceThemeOverlay">
+		<item name="android:layout">@layout/fragment_preferences</item>
 	</style>
 </resources>
