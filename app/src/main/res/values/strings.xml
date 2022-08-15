@@ -2,6 +2,7 @@
     <!-- MainFragment -->
     <string name="menu_openfile">Open file</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_about">About VerText</string>
 
     <string name="file_unknown">Unknown</string>
     <string name="none_open">Tap the top right icon to open a file.</string>
@@ -15,7 +16,6 @@
     <string name="setting_theme_light">Light</string>
     <string name="setting_theme_dark">Dark</string>
 
-    <!-- About page -->
+    <!-- AboutFragment -->
     <string name="about_sourcecode">Source code</string>
-
 </resources>
