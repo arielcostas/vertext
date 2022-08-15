@@ -22,7 +22,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
-	): View? {
+	): View {
 		_binding = FragmentAboutBinding.inflate(inflater, container, false)
 		val view = binding.root
 
@@ -31,13 +31,18 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
 		return view
 	}
 
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		binding.aboutToolbar.setNavigationOnClickListener { v: View? -> requireActivity().onBackPressed() }
+	}
+
 	override fun onDestroyView() {
 		super.onDestroyView()
 		_binding = null
 	}
 
 	private fun getAboutItems(): List<AboutItem> {
-		var items: MutableList<AboutItem> = ArrayList()
+		val items: MutableList<AboutItem> = ArrayList()
 		items.add(
 			AboutItem(
 				getString(R.string.about_sourcecode),

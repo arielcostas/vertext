@@ -35,7 +35,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
-	): View? {
+	): View {
 		_binding = FragmentMainBinding.inflate(inflater, container, false)
 		val view = binding.root
 		return view
@@ -55,10 +55,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 				true
 			} else if (item.itemId == R.id.mainmenu_settings) {
 				// Change to the SettingsFragment
-				(getActivity() as FragmentChangeListener?)!!.setFragment(SettingsFragment())
+				(activity as FragmentChangeListener?)!!.setFragment(SettingsFragment())
 				true
 			} else if (item.itemId == R.id.mainmenu_about) {
-				(getActivity() as FragmentChangeListener?)!!.setFragment(AboutFragment())
+				(activity as FragmentChangeListener?)!!.setFragment(AboutFragment())
 				true
 			} else {
 				false

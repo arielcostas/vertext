@@ -9,14 +9,19 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.appbar.MaterialToolbar
 import dev.costas.vertext.R
+import dev.costas.vertext.databinding.FragmentPreferencesBinding
 
 class SettingsFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListener {
+    private var _binding: FragmentPreferencesBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentPreferencesBinding.bind(view)
         val toolbar = view.findViewById<MaterialToolbar>(R.id.settings_toolbar)
         toolbar.setNavigationOnClickListener { v: View? -> requireActivity().onBackPressed() }
     }
