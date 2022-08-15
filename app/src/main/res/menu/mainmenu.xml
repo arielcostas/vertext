@@ -1,13 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/mainmenu_abrir"
-        android:icon="@drawable/ic_openfile_24"
-        android:title="@string/menu_openfile"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/mainmenu_settings"
-        android:icon="@drawable/ic_settings_24"
-        android:title="@string/menu_settings"
-        app:showAsAction="ifRoom"/>
+	<item
+		android:id="@+id/mainmenu_abrir"
+		android:icon="@drawable/ic_openfile_24"
+		android:title="@string/menu_openfile"
+		app:showAsAction="ifRoom" />
+	<item
+		android:id="@+id/mainmenu_settings"
+		android:icon="@drawable/ic_settings_24"
+		android:title="@string/menu_settings"
+		app:showAsAction="ifRoom" />
+	<item
+		android:id="@+id/mainmenu_about"
+		android:icon="@drawable/ic_about_24"
+		android:title="@string/menu_settings"
+		app:showAsAction="ifRoom" />
 </menu>
