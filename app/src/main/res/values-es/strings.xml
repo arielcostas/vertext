@@ -7,7 +7,6 @@
     <string name="file_unknown">Desconocido</string>
     <string name="none_open">Pulsa el icono superior derecho para abrir un archivo.</string>
     <!-- SettingsFragment -->
-    <string name="settings_title">Ajustes</string>
     <string name="settings_category_ui">Interfaz de usuario</string>
     <string name="settings_theme_title">Tema</string>
     <string name="setting_theme_system">Predeterminado del sistema</string>
