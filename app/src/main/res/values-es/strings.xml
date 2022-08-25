@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- MainFragment -->
+    <string name="menu_openfile">Abrir archivo</string>
+    <string name="menu_settings">Ajustes</string>
+    <string name="menu_about">Sobre VerText</string>
+    <string name="file_unknown">Desconocido</string>
+    <string name="none_open">Pulsa el icono superior derecho para abrir un archivo.</string>
+    <!-- SettingsFragment -->
+    <string name="settings_category_ui">Interfaz de usuario</string>
+    <string name="settings_theme_title">Tema</string>
+    <string name="setting_theme_system">Predeterminado del sistema</string>
+    <string name="setting_theme_light">Claro</string>
+    <string name="setting_theme_dark">Oscuro</string>
+    <!-- AboutFragment -->
+    <string name="about_sourcecode">Código fuente</string>
+</resources>
