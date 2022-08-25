@@ -46,10 +46,10 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
 		items.add(
 			AboutItem(
 				getString(R.string.about_sourcecode),
-				"https://framagit.org/arielcostas/vertext",
+				"https://github.com/arielcostas/vertext",
 				AppCompatResources.getDrawable(requireContext(), R.drawable.ic_code_24)!!
 			) {
-				val website = Uri.parse("https://framagit.org/arielcostas/vertext")
+				val website = Uri.parse("https://github.com/arielcostas/vertext")
 				val intent = Intent(Intent.ACTION_VIEW, website)
 				startActivity(intent)
 			})

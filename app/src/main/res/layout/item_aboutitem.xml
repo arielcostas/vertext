@@ -38,5 +38,5 @@
 		android:textStyle="normal"
 		app:layout_constraintBottom_toBottomOf="@id/aiIcon"
 		app:layout_constraintStart_toEndOf="@id/aiIcon"
-		tools:text="https://framagit.org/arielcostas/vertext" />
+		tools:text="https://github.com/arielcostas/vertext" />
 </androidx.constraintlayout.widget.ConstraintLayout>
