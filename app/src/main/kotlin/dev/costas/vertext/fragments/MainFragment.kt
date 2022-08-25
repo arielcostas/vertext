@@ -37,8 +37,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 		savedInstanceState: Bundle?
 	): View {
 		_binding = FragmentMainBinding.inflate(inflater, container, false)
-		val view = binding.root
-		return view
+		return binding.root
 	}
 
 	override fun onDestroyView() {
@@ -50,18 +49,23 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 		super.onViewCreated(view, savedInstanceState)
 		textView = binding.principal
 		binding.mainToolbar.setOnMenuItemClickListener { item: MenuItem ->
-			if (item.itemId == R.id.mainmenu_abrir) {
-				openFile()
-				true
-			} else if (item.itemId == R.id.mainmenu_settings) {
-				// Change to the SettingsFragment
-				(activity as FragmentChangeListener?)!!.setFragment(SettingsFragment())
-				true
-			} else if (item.itemId == R.id.mainmenu_about) {
-				(activity as FragmentChangeListener?)!!.setFragment(AboutFragment())
-				true
-			} else {
-				false
+			when (item.itemId) {
+				R.id.mainmenu_abrir -> {
+					openFile()
+					true
+				}
+				R.id.mainmenu_settings -> {
+					// Change to the SettingsFragment
+					(activity as FragmentChangeListener?)!!.setFragment(SettingsFragment())
+					true
+				}
+				R.id.mainmenu_about -> {
+					(activity as FragmentChangeListener?)!!.setFragment(AboutFragment())
+					true
+				}
+				else -> {
+					false
+				}
 			}
 		}
 		val intent = requireActivity().intent
@@ -123,7 +127,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 		mStartForResult.launch(intent)
 	}
 
-	var mStartForResult = registerForActivityResult<Intent, ActivityResult>(
+	private var mStartForResult = registerForActivityResult(
 		ActivityResultContracts.StartActivityForResult()
 	) { result: ActivityResult ->
 		if (result.resultCode == Activity.RESULT_OK) {
@@ -147,7 +151,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 		}
 	}
 
-	fun getFilenameFromUri(uri: Uri?): String {
+	private fun getFilenameFromUri(uri: Uri?): String {
 		val cursor = requireActivity().contentResolver.query(uri!!, null, null, null, null)
 			?: return getString(R.string.file_unknown)
 		val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
@@ -162,9 +166,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 		toolbar.title = title
 	}
 
-	fun setTitle(title: CharSequence) {
+	private fun setTitle(title: CharSequence) {
 		val contentViewModel =
-			ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+			ViewModelProvider(requireActivity())[ContentViewModel::class.java]
 		if (title === "") {
 			contentViewModel.title = ""
 			setToolbarTitle(requireContext().applicationInfo.name)
@@ -179,9 +183,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 		textView!!.setLines(content.toString().split("\n").toTypedArray().size)
 	}
 
-	fun setContent(content: CharSequence) {
+	private fun setContent(content: CharSequence) {
 		val contentViewModel =
-			ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+			ViewModelProvider(requireActivity())[ContentViewModel::class.java]
 		contentViewModel.content = content.toString()
 		setTextviewContent(content)
 	}

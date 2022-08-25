@@ -33,7 +33,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		binding.aboutToolbar.setNavigationOnClickListener { v: View? -> requireActivity().onBackPressed() }
+		binding.aboutToolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
 	}
 
 	override fun onDestroyView() {

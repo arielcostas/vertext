@@ -13,7 +13,7 @@ import dev.costas.vertext.databinding.FragmentPreferencesBinding
 
 class SettingsFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListener {
     private var _binding: FragmentPreferencesBinding? = null
-    private val binding get() = _binding!!
+    //private val binding get() = _binding!!
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
@@ -23,7 +23,7 @@ class SettingsFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeLis
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentPreferencesBinding.bind(view)
         val toolbar = view.findViewById<MaterialToolbar>(R.id.settings_toolbar)
-        toolbar.setNavigationOnClickListener { v: View? -> requireActivity().onBackPressed() }
+        toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
     }
 
     override fun onPause() {
