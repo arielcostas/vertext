@@ -3,6 +3,7 @@ package dev.costas.vertext.fragments
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.text.Html
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.appbar.MaterialToolbar
+import dev.costas.vertext.AboutActivity
 import dev.costas.vertext.FragmentChangeListener
 import dev.costas.vertext.R
 import dev.costas.vertext.databinding.FragmentMainBinding
@@ -60,7 +62,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 					true
 				}
 				R.id.mainmenu_about -> {
-					(activity as FragmentChangeListener?)!!.setFragment(AboutFragment())
+					val intent = Intent(activity, AboutActivity::class.java)
+					startActivity(intent)
 					true
 				}
 				else -> {
@@ -80,7 +83,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 				setContent(Html.escapeHtml(entrada))
 			}
 			Intent.ACTION_SEND -> {
-				uri = intent.getParcelableExtra(Intent.EXTRA_STREAM)
+				uri = if (Build.VERSION.SDK_INT >= 33) {
+					intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+				} else {
+					intent.getParcelableExtra(Intent.EXTRA_STREAM)
+				}
 				val text = intent.getStringExtra(Intent.EXTRA_TEXT)
 				if (uri != null) {
 					try {

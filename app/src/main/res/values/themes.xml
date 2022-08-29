@@ -1,17 +1,18 @@
 <resources>
-    <style name="Theme.VerText" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorAccent">@color/primary</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:statusBarColor">@color/primary_darker</item>
 
-        <item name="preferenceTheme">@style/Theme.VerTextPreferences</item>
-        <item name="alertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
-        <item name="dialogCornerRadius">18dp</item>
-    </style>
+	<style name="Theme.VerText" parent="Theme.Material3.DayNight.NoActionBar">
+		<item name="colorPrimary">@color/primary</item>
+		<item name="colorAccent">@color/primary</item>
+		<item name="colorOnPrimary">@color/white</item>
+		<item name="android:textColor">@color/black</item>
+		<item name="android:statusBarColor">@color/primary_darker</item>
 
-    <style name="Theme.VerTextPreferences" parent="@style/PreferenceThemeOverlay">
-        <item name="android:layout">@layout/fragment_preferences</item>
-    </style>
+		<item name="preferenceTheme">@style/Theme.VerTextPreferences</item>
+		<item name="alertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+		<item name="dialogCornerRadius">18dp</item>
+	</style>
+
+	<style name="Theme.VerTextPreferences" parent="@style/PreferenceThemeOverlay">
+		<item name="android:layout">@layout/fragment_preferences</item>
+	</style>
 </resources>
