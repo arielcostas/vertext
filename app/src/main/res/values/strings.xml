@@ -17,4 +17,6 @@
 
 	<!-- AboutFragment -->
 	<string name="about_sourcecode">Source code</string>
+	<string name="about_translate">Translations</string>
+
 </resources>

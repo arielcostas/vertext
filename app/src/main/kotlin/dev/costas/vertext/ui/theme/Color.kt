@@ -1,4 +1,4 @@
-package dev.costas.vertext.theme
+package dev.costas.vertext.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

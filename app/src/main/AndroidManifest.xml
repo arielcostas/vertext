@@ -12,7 +12,7 @@
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:supportsRtl="true"
 		android:theme="@style/Theme.VerText"
-		tools:targetApi="32">
+		tools:targetApi="33">
 		<activity
 			android:name=".AboutActivity"
 			android:exported="false"
