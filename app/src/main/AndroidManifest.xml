@@ -17,7 +17,7 @@
 			android:exported="false"
 			android:theme="@style/Theme.VerText" />
 		<activity
-			android:name=".MainActivity"
+			android:name=".VertextActivity"
 			android:configChanges="keyboardHidden|screenSize"
 			android:exported="true"
 			android:theme="@style/Theme.VerText">
