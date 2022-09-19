@@ -6,6 +6,7 @@
 
 	<string name="file_unknown">Unknown</string>
 	<string name="none_open">Tap the top right icon to open a file.</string>
+	<string name="line_copied">Copied to clipboard!</string>
 
 	<!-- SettingsFragment -->
 	<string name="settings_category_ui">User interface</string>

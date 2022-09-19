@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import dev.costas.vertext.TextLine
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class

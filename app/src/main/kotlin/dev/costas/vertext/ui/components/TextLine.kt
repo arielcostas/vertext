@@ -1,5 +1,9 @@
 package dev.costas.vertext.ui.components
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -16,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import dev.costas.vertext.R
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
@@ -39,9 +44,15 @@ fun TextLine(lineNumber: Int, content: String, totalLines: Int) {
             text = content,
             modifier = Modifier
                 .combinedClickable(onClick = {}, onLongClick = {
-                    Toast
-                        .makeText(context, "Long pressed $lineNumber", Toast.LENGTH_SHORT)
-                        .show()
+                    val clipboardManager = context.getSystemService(
+                        Context.CLIPBOARD_SERVICE
+                    ) as ClipboardManager
+                    clipboardManager.setPrimaryClip(ClipData.newPlainText("", content))
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
+                        Toast
+                            .makeText(context, R.string.line_copied, Toast.LENGTH_SHORT)
+                            .show()
+
                 })
                 .fillMaxWidth()
                 .background(Color.White)
