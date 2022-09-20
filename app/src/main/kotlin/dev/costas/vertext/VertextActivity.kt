@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.preference.PreferenceManager
-import dev.costas.vertext.ui.components.VertextActivityContent
+import dev.costas.vertext.ui.components.ScaffoldMain
 import dev.costas.vertext.ui.theme.VerTextTheme
 import dev.costas.vertext.viewmodels.ContentViewModel
 import java.io.IOException
@@ -131,7 +131,7 @@ class VertextActivity : ComponentActivity() {
 					else -> isSystemInDarkTheme()
 				}
 			) {
-				VertextActivityContent(vm.title, vm.content, { launcher.launch(arrayOf("text/*")) })
+				ScaffoldMain(vm.title, vm.content, { launcher.launch(arrayOf("text/*")) })
 			}
 		}
 	}

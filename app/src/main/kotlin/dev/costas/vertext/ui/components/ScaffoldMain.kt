@@ -25,7 +25,7 @@ import dev.costas.vertext.R
 	ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class
 )
 @Composable
-fun VertextActivityContent(title: String, content: String, onFileOpenAction: () -> Unit) {
+fun ScaffoldMain(title: String, content: String, onFileOpenAction: () -> Unit) {
 	val context = LocalContext.current
 	Scaffold(
 		topBar = {
