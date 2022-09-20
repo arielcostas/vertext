@@ -1,5 +1,6 @@
 package dev.costas.vertext.ui.components
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.consumedWindowInsets
@@ -13,29 +14,19 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat.startActivity
+import dev.costas.vertext.AboutActivity
 import dev.costas.vertext.R
 
 @OptIn(
 	ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class
 )
 @Composable
-fun MainScaffold() {
-	val content = """
-        Hola que tal
-        
-        Esto es un ejemplo
-        
-        Tiene cinco líneas, dos de ellas vacías y tres con contenido, que puede pasar de una línea de tamaño
-        Seis
-        Siete
-        Ocho
-        Nueve
-        Diez
-        Once
-    """.trimIndent()
-
+fun VertextActivityContent(title: String, content: String, onFileOpenAction: () -> Unit) {
+	val context = LocalContext.current
 	Scaffold(
 		topBar = {
 			TopAppBar(
@@ -43,7 +34,7 @@ fun MainScaffold() {
 				actions = {
 					var isExpanded by remember { mutableStateOf(false) }
 
-					IconButton(onClick = { /*TODO*/ }) {
+					IconButton(onClick = { onFileOpenAction() }) {
 						Icon(painterResource(R.drawable.ic_openfile_24), "")
 					}
 					IconButton(onClick = { isExpanded = !isExpanded }) {
@@ -54,7 +45,8 @@ fun MainScaffold() {
 						onDismissRequest = { isExpanded = false }
 					) {
 						DropdownMenuItem(
-							onClick = { },
+							onClick = {
+							},
 							leadingIcon = {
 								Icon(Icons.Outlined.Settings, "")
 							},
@@ -62,7 +54,11 @@ fun MainScaffold() {
 								Text(stringResource(R.string.menu_settings))
 							})
 						DropdownMenuItem(
-							onClick = { },
+							onClick = {
+								val intent = Intent(context, AboutActivity::class.java)
+
+								startActivity(context, intent, null)
+							},
 							leadingIcon = {
 								Icon(Icons.Outlined.Info, "")
 							},
