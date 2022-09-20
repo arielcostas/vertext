@@ -8,9 +8,4 @@ import androidx.lifecycle.ViewModel
 class ContentViewModel : ViewModel() {
     var title by mutableStateOf("")
     var content by mutableStateOf("")
-
-    fun clear() {
-        title = ""
-        content = ""
-    }
 }

@@ -30,7 +30,7 @@ fun VertextActivityContent(title: String, content: String, onFileOpenAction: () 
 	Scaffold(
 		topBar = {
 			TopAppBar(
-				title = { Text("VerText") },
+				title = { Text(text = title) },
 				actions = {
 					var isExpanded by remember { mutableStateOf(false) }
 
