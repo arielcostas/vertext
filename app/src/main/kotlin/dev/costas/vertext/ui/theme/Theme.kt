@@ -1,6 +1,5 @@
 package dev.costas.vertext.ui.theme
 
-import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -12,14 +11,22 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorScheme = darkColorScheme(
 	primary = Primary,
-	onPrimary = Black,
-	onBackground = White
+	surfaceTint = Gray900,
+	onPrimary = Gray900,
+	onBackground = White,
+	surface = Black,
+	onSecondary = Gray800,
+	secondary = Gray100
 )
 
 private val LightColorScheme = lightColorScheme(
 	primary = Primary,
+	surfaceTint = White,
 	onPrimary = White,
-	onBackground = Black
+	onBackground = Black,
+	surface = White,
+	onSecondary = Gray100,
+	secondary = Gray800
 )
 
 @Composable
@@ -33,8 +40,6 @@ fun VerTextTheme(
 	}
 	val view = LocalView.current
 	if (!view.isInEditMode) {
-		val window = (view.context as Activity).window
-
 		val systemUiController = rememberSystemUiController()
 
 		DisposableEffect(systemUiController, darkTheme) {

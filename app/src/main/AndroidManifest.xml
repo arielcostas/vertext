@@ -13,11 +13,15 @@
 		android:theme="@style/Theme.VerText"
 		tools:targetApi="33">
 		<activity
+			android:name=".PreferenceActivity"
+			android:exported="false"
+			android:theme="@style/Theme.VerText" />
+		<activity
 			android:name=".AboutActivity"
 			android:exported="false"
 			android:theme="@style/Theme.VerText" />
 		<activity
-			android:name=".MainActivity"
+			android:name=".VertextActivity"
 			android:configChanges="keyboardHidden|screenSize"
 			android:exported="true"
 			android:theme="@style/Theme.VerText">
