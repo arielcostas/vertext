@@ -1,5 +1,6 @@
 package dev.costas.vertext
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -11,22 +12,51 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import dev.costas.vertext.ui.components.ScaffoldMain
 import dev.costas.vertext.ui.theme.VerTextTheme
 import dev.costas.vertext.viewmodels.ContentViewModel
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
 import java.util.*
 
+
 class VertextActivity : ComponentActivity() {
 	private val TAG = this::class.simpleName
+	private val vm: ContentViewModel by viewModels()
+
+	private val fileOpeningLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) {
+		if (it != null) {
+			val sb = StringBuilder()
+			val inputStream: InputStream
+			try {
+				inputStream = contentResolver.openInputStream(it)!!
+
+				val scanner = Scanner(inputStream)
+				while (scanner.hasNextLine()) {
+					sb.append(scanner.nextLine())
+					sb.append("\n")
+				}
+				vm.content = sb.toString()
+				vm.title = getFilenameFromUri(it)
+			} catch (e: Exception) {
+				vm.content = e.message.toString()
+			}
+		}
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-
-		val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-		val vm: ContentViewModel by viewModels()
 
 		val action = intent.action
 		val type = intent.type
@@ -98,40 +128,26 @@ class VertextActivity : ComponentActivity() {
 			}
 		}
 
-
 		val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
 		intent.type = "text/*"
 
-		val launcher = registerForActivityResult(ActivityResultContracts.OpenDocument()) {
-			if (it != null) {
-				val sb = StringBuilder()
-				val inputStream: InputStream
-				try {
-					inputStream = contentResolver.openInputStream(it)!!
-
-					val scanner = Scanner(inputStream)
-					while (scanner.hasNextLine()) {
-						sb.append(scanner.nextLine())
-						sb.append("\n")
-					}
-					vm.content = sb.toString()
-					vm.title = getFilenameFromUri(it)
-				} catch (e: Exception) {
-					vm.content = e.message.toString()
-				}
-			}
+		val nightModeFlow: Flow<String> = dataStore.data.map { preferences ->
+			preferences[PreferenceKeys.NIGHT_MODE_PREFERENCE] ?: "MODE_NIGHT_FOLLOW_SYSTEM"
 		}
 
 		setContent {
+			val darkTheme: String by nightModeFlow.collectAsState(initial = "MODE_NIGHT_FOLLOW_SYSTEM")
 			VerTextTheme(
-				darkTheme = when (
-					prefs.getString("theme", "MODE_NIGHT_FOLLOW_SYSTEM")) {
+				darkTheme = when (darkTheme) {
 					"MODE_NIGHT_NO" -> false
 					"MODE_NIGHT_YES" -> true
 					else -> isSystemInDarkTheme()
 				}
 			) {
-				ScaffoldMain(vm.title, vm.content, { launcher.launch(arrayOf("text/*")) })
+				ScaffoldMain(
+					vm.title,
+					vm.content,
+					{ fileOpeningLauncher.launch(arrayOf("text/*")) })
 			}
 		}
 	}

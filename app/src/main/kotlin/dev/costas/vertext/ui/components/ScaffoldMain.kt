@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat.startActivity
 import dev.costas.vertext.AboutActivity
+import dev.costas.vertext.PreferenceActivity
 import dev.costas.vertext.R
 
 @OptIn(
@@ -46,6 +47,9 @@ fun ScaffoldMain(title: String, content: String, onFileOpenAction: () -> Unit) {
 					) {
 						DropdownMenuItem(
 							onClick = {
+								val intent = Intent(context, PreferenceActivity::class.java)
+
+								startActivity(context, intent, null)
 							},
 							leadingIcon = {
 								Icon(Icons.Outlined.Settings, "")
