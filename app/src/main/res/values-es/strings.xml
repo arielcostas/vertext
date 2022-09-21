@@ -6,6 +6,8 @@
 	<string name="menu_about">Sobre VerText</string>
 	<string name="file_unknown">Desconocido</string>
 	<string name="none_open">Pulsa el icono superior derecho para abrir un archivo.</string>
+	<string name="line_copied">¡Copiado al portapapeles!</string>
+	<string name="error_reading">Error de lectura </string>
 	<!-- SettingsFragment -->
 	<string name="settings_category_ui">Interfaz de usuario</string>
 	<string name="settings_theme_title">Tema</string>
