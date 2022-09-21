@@ -2,19 +2,14 @@ package dev.costas.vertext
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.core.edit
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceFragmentCompat
-import com.google.android.material.appbar.MaterialToolbar
+import dev.costas.vertext.data.getDarkModeValue
 import dev.costas.vertext.databinding.FragmentPreferencesBinding
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class PreferenceActivity : AppCompatActivity(R.layout.activity_preferences) {
@@ -66,19 +61,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
 				}
 			}
 
-			val nightMode: Int =
-				when (sharedPreferences.getString(key, "MODE_NIGHT_FOLLOW_SYSTEM")) {
-					"MODE_NIGHT_FOLLOW_SYSTEM" -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-					"MODE_NIGHT_NO" -> AppCompatDelegate.MODE_NIGHT_NO
-					"MODE_NIGHT_YES" -> AppCompatDelegate.MODE_NIGHT_YES
-					else -> {
-						Log.e(
-							"onSharedPreferenceChanged",
-							"unexpected new mode " + sharedPreferences.getString(key, "")
-						)
-						AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-					}
-				}
+			val nightMode =
+				getDarkModeValue(sharedPreferences.getString(key, "MODE_NIGHT_FOLLOW_SYSTEM")!!)
 			AppCompatDelegate.setDefaultNightMode(nightMode)
 		}
 	}

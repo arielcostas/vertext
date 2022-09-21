@@ -1,6 +1,5 @@
 package dev.costas.vertext
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -11,21 +10,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
+import dev.costas.vertext.data.getDarkModeValue
 import dev.costas.vertext.ui.components.ScaffoldMain
 import dev.costas.vertext.ui.theme.VerTextTheme
 import dev.costas.vertext.viewmodels.ContentViewModel
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.io.IOException
 import java.io.InputStream
 import java.util.*
@@ -57,6 +52,7 @@ class VertextActivity : ComponentActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+
 
 		val action = intent.action
 		val type = intent.type
@@ -135,8 +131,11 @@ class VertextActivity : ComponentActivity() {
 			preferences[PreferenceKeys.NIGHT_MODE_PREFERENCE] ?: "MODE_NIGHT_FOLLOW_SYSTEM"
 		}
 
+		val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+		val spDarkMode = sharedPreferences.getString("theme", "MODE_NIGHT_FOLLOW_SYSTEM")!!
+
 		setContent {
-			val darkTheme: String by nightModeFlow.collectAsState(initial = "MODE_NIGHT_FOLLOW_SYSTEM")
+			val darkTheme: String by nightModeFlow.collectAsState(initial = spDarkMode)
 			VerTextTheme(
 				darkTheme = when (darkTheme) {
 					"MODE_NIGHT_NO" -> false
@@ -150,6 +149,9 @@ class VertextActivity : ComponentActivity() {
 					{ fileOpeningLauncher.launch(arrayOf("text/*")) })
 			}
 		}
+
+		val nightMode = getDarkModeValue(spDarkMode)
+		AppCompatDelegate.setDefaultNightMode(nightMode)
 	}
 
 	private fun getFilenameFromUri(uri: Uri?): String {

@@ -15,7 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -55,7 +54,7 @@ fun TextLine(lineNumber: Int, content: String, totalLines: Int) {
 
                 })
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceTint)
                 .padding(horizontal = 16.dp, vertical = 2.dp),
             style = TextStyle(fontFamily = FontFamily.Monospace)
         )

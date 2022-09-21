@@ -1,4 +1,4 @@
-package dev.costas.vertext.datasets
+package dev.costas.vertext.data
 
 import dev.costas.vertext.R
 import dev.costas.vertext.models.AboutItem
