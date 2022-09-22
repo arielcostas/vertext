@@ -20,5 +20,6 @@
 	<!-- AboutFragment -->
 	<string name="about_sourcecode">Source code</string>
 	<string name="about_translate">Translations</string>
-
+	<string name="about_version">Version</string>
+	<string name="about_license_title">License</string>
 </resources>
