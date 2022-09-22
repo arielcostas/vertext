@@ -108,19 +108,7 @@ class VertextActivity : ComponentActivity() {
 			else -> {
 				vm.title = "VerText"
 
-				vm.content = """
-        Hola que tal
-        
-        Esto es un ejemplo
-        
-        Tiene cinco líneas, dos de ellas vacías y tres con contenido, que puede pasar de una línea de tamaño
-        Seis
-        Siete
-        Ocho
-        Nueve
-        Diez
-        Once
-    """.trimIndent()
+				vm.content = getString(R.string.none_open)
 			}
 		}
 
