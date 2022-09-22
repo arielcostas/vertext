@@ -54,7 +54,7 @@ fun TextLine(lineNumber: Int, content: String, totalLines: Int) {
 
                 })
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surfaceTint)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 16.dp, vertical = 2.dp),
             style = TextStyle(fontFamily = FontFamily.Monospace)
         )
