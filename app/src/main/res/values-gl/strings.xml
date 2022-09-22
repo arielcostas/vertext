@@ -17,4 +17,6 @@
 	<!-- AboutFragment -->
 	<string name="about_sourcecode">Código fonte</string>
 	<string name="about_translate">Traducións</string>
+	<string name="about_version">Versión</string>
+	<string name="about_license_title">Licenza</string>
 </resources>
