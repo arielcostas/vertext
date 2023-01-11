@@ -53,7 +53,6 @@ class VertextActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-
 		val action = intent.action
 		val type = intent.type
 		val uri: Uri?
@@ -106,9 +105,11 @@ class VertextActivity : ComponentActivity() {
 				}
 			}
 			else -> {
-				vm.title = "VerText"
+				if (vm.title == "") {
+					vm.title = "VerText"
+					vm.content = getString(R.string.none_open)
+				}
 
-				vm.content = getString(R.string.none_open)
 			}
 		}
 
