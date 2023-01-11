@@ -23,32 +23,34 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import java.io.InputStream
-import java.util.*
+import java.util.Arrays
+import java.util.Scanner
 
 
 class VertextActivity : ComponentActivity() {
 	private val TAG = this::class.simpleName
 	private val vm: ContentViewModel by viewModels()
 
-	private val fileOpeningLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) {
-		if (it != null) {
-			val sb = StringBuilder()
-			val inputStream: InputStream
-			try {
-				inputStream = contentResolver.openInputStream(it)!!
+	private val fileOpeningLauncher =
+		registerForActivityResult(ActivityResultContracts.OpenDocument()) {
+			if (it != null) {
+				val sb = StringBuilder()
+				val inputStream: InputStream
+				try {
+					inputStream = contentResolver.openInputStream(it)!!
 
-				val scanner = Scanner(inputStream)
-				while (scanner.hasNextLine()) {
-					sb.append(scanner.nextLine())
-					sb.append("\n")
+					val scanner = Scanner(inputStream)
+					while (scanner.hasNextLine()) {
+						sb.append(scanner.nextLine())
+						sb.append("\n")
+					}
+					vm.content = sb.toString()
+					vm.title = getFilenameFromUri(it)
+				} catch (e: Exception) {
+					vm.content = e.message.toString()
 				}
-				vm.content = sb.toString()
-				vm.title = getFilenameFromUri(it)
-			} catch (e: Exception) {
-				vm.content = e.message.toString()
 			}
 		}
-	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -76,6 +78,7 @@ class VertextActivity : ComponentActivity() {
 				afd.close()
 				vm.title = getFilenameFromUri(uri)
 			}
+
 			Intent.ACTION_SEND -> {
 				uri = if (Build.VERSION.SDK_INT >= 33) {
 					intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
@@ -101,15 +104,15 @@ class VertextActivity : ComponentActivity() {
 					}
 				} else {
 					vm.title = getString(R.string.file_unknown)
-					vm.content = getString(R.string.error_reading)
+					vm.content = intent.getStringExtra(Intent.EXTRA_TEXT) ?: ""
 				}
 			}
+
 			else -> {
 				if (vm.title == "") {
 					vm.title = "VerText"
 					vm.content = getString(R.string.none_open)
 				}
-
 			}
 		}
 
@@ -134,8 +137,8 @@ class VertextActivity : ComponentActivity() {
 			) {
 				ScaffoldMain(
 					vm.title,
-					vm.content,
-					{ fileOpeningLauncher.launch(arrayOf("text/*")) })
+					vm.content
+				) { fileOpeningLauncher.launch(arrayOf("text/*")) }
 			}
 		}
 
