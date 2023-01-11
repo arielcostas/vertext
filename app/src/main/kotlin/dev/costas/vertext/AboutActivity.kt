@@ -16,7 +16,8 @@ class AboutActivity : ComponentActivity() {
 		setContent {
 			VerTextTheme(
 				darkTheme = when (
-					prefs.getString("theme", "MODE_NIGHT_FOLLOW_SYSTEM")) {
+					prefs.getString("theme", "MODE_NIGHT_FOLLOW_SYSTEM")
+				) {
 					"MODE_NIGHT_NO" -> false
 					"MODE_NIGHT_YES" -> true
 					else -> isSystemInDarkTheme()

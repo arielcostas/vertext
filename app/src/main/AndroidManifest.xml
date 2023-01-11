@@ -15,10 +15,12 @@
 		<activity
 			android:name=".PreferenceActivity"
 			android:exported="false"
+			android:label="@string/menu_settings"
 			android:theme="@style/Theme.VerText" />
 		<activity
 			android:name=".AboutActivity"
 			android:exported="false"
+			android:label="@string/menu_about"
 			android:theme="@style/Theme.VerText" />
 		<activity
 			android:name=".VertextActivity"
