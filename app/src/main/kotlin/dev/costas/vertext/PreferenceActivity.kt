@@ -2,6 +2,7 @@ package dev.costas.vertext
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -15,10 +16,24 @@ import kotlinx.coroutines.launch
 class PreferenceActivity : AppCompatActivity(R.layout.activity_preferences) {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 		supportFragmentManager.beginTransaction()
 			.setReorderingAllowed(true)
 			.add(R.id.fragment_container_view, SettingsFragment::class.java, savedInstanceState)
 			.commit()
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		when (item.itemId) {
+			android.R.id.home -> {
+				finish()
+			}
+
+			else -> super.onOptionsItemSelected(item)
+		}
+		return super.onOptionsItemSelected(item)
 	}
 }
 
@@ -34,11 +49,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
-		// TODO: Set dark mode for this view
-
 		_binding = FragmentPreferencesBinding.bind(view)
-		val toolbar = binding.settingsToolbar
-		toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
 	}
 
 	override fun onPause() {
