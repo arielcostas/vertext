@@ -4,7 +4,11 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,9 +21,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.costas.vertext.R
+import dev.costas.vertext.ui.theme.VerTextTheme
 
 @Composable
 fun AboutPageItem(title: String, subtitle: String, icon: Painter, clickListener: () -> Unit) {
+	VerTextTheme() {
+
+	}
 	Row(
 		modifier = Modifier
 			.clickable { clickListener() }
@@ -32,7 +40,7 @@ fun AboutPageItem(title: String, subtitle: String, icon: Painter, clickListener:
 		Icon(
 			painter = icon,
 			contentDescription = "Source code icon",
-			tint = MaterialTheme.colorScheme.onBackground
+			tint = MaterialTheme.colorScheme.onBackground,
 		)
 		Column(
 			Modifier.padding(start = 16.dp)

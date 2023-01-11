@@ -43,6 +43,7 @@ fun ScaffoldMain(title: String, content: String, onFileOpenAction: () -> Unit) {
 	Scaffold(
 		topBar = {
 			TopAppBar(
+				modifier = Modifier.background(MaterialTheme.colorScheme.onSurface),
 				title = { Text(text = title) },
 				actions = {
 					var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -99,4 +100,5 @@ fun ScaffoldMain(title: String, content: String, onFileOpenAction: () -> Unit) {
 			}
 		}
 	)
+
 }
