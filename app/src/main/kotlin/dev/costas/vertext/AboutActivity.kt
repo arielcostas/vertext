@@ -24,7 +24,7 @@ class AboutActivity : ComponentActivity() {
 				}
 			) {
 				ScaffoldAbout {
-					onBackPressedDispatcher.onBackPressed()
+					finish()
 				}
 			}
 		}

@@ -18,8 +18,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import dev.costas.vertext.AboutActivity
 import dev.costas.vertext.PreferenceActivity
@@ -42,49 +46,56 @@ fun ScaffoldMain(title: String, content: String, onFileOpenAction: () -> Unit) {
 	val context = LocalContext.current
 	Scaffold(
 		topBar = {
-			TopAppBar(
-				modifier = Modifier.background(MaterialTheme.colorScheme.onSurface),
-				title = { Text(text = title) },
-				actions = {
-					var isExpanded by rememberSaveable { mutableStateOf(false) }
+			Surface(shadowElevation = 8.dp) {
+				TopAppBar(
+					colors = TopAppBarDefaults.smallTopAppBarColors(
+						containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp),
+						titleContentColor = MaterialTheme.colorScheme.onSurface,
+						navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+					),
+					modifier = Modifier.background(MaterialTheme.colorScheme.onSurface),
+					title = { Text(text = title) },
+					actions = {
+						var isExpanded by rememberSaveable { mutableStateOf(false) }
 
-					IconButton(onClick = { onFileOpenAction() }) {
-						Icon(painterResource(R.drawable.ic_openfile_24), "")
-					}
-					IconButton(onClick = { isExpanded = !isExpanded }) {
-						Icon(Icons.Default.MoreVert, "")
-					}
-					DropdownMenu(
-						expanded = isExpanded,
-						onDismissRequest = { isExpanded = false }
-					) {
-						DropdownMenuItem(
-							onClick = {
-								val intent = Intent(context, PreferenceActivity::class.java)
+						IconButton(onClick = { onFileOpenAction() }) {
+							Icon(painterResource(R.drawable.ic_openfile_24), "")
+						}
+						IconButton(onClick = { isExpanded = !isExpanded }) {
+							Icon(Icons.Default.MoreVert, "")
+						}
+						DropdownMenu(
+							expanded = isExpanded,
+							onDismissRequest = { isExpanded = false }
+						) {
+							DropdownMenuItem(
+								onClick = {
+									val intent = Intent(context, PreferenceActivity::class.java)
 
-								startActivity(context, intent, null)
-							},
-							leadingIcon = {
-								Icon(Icons.Outlined.Settings, "")
-							},
-							text = {
-								Text(stringResource(R.string.menu_settings))
-							})
-						DropdownMenuItem(
-							onClick = {
-								val intent = Intent(context, AboutActivity::class.java)
+									startActivity(context, intent, null)
+								},
+								leadingIcon = {
+									Icon(Icons.Outlined.Settings, "")
+								},
+								text = {
+									Text(stringResource(R.string.menu_settings))
+								})
+							DropdownMenuItem(
+								onClick = {
+									val intent = Intent(context, AboutActivity::class.java)
 
-								startActivity(context, intent, null)
-							},
-							leadingIcon = {
-								Icon(Icons.Outlined.Info, "")
-							},
-							text = {
-								Text(stringResource(R.string.menu_about))
-							})
+									startActivity(context, intent, null)
+								},
+								leadingIcon = {
+									Icon(Icons.Outlined.Info, "")
+								},
+								text = {
+									Text(stringResource(R.string.menu_about))
+								})
+						}
 					}
-				}
-			)
+				)
+			}
 		},
 		content = { innerPadding ->
 			LazyColumn(
