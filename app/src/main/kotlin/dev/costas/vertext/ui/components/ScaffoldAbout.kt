@@ -28,54 +28,42 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.costas.vertext.R
 import dev.costas.vertext.data.AboutItems
-import dev.costas.vertext.ui.theme.VerTextTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ScaffoldAbout(onBackButtonPressed: () -> Unit) {
 	val context = LocalContext.current
-	VerTextTheme() {
-		Scaffold(
-			topBar = {
-				Surface(shadowElevation = 8.dp) {
-					TopAppBar(
-						colors = TopAppBarDefaults.smallTopAppBarColors(
-							containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp),
-							titleContentColor = MaterialTheme.colorScheme.onSurface,
-							navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-						),
-						title = { Text(stringResource(R.string.menu_about)) },
-						navigationIcon = {
-							IconButton(onClick = { onBackButtonPressed() }) {
-								Icon(Icons.Default.ArrowBack, "")
-							}
-						}
-					)
+	Scaffold(topBar = {
+		Surface(shadowElevation = 8.dp) {
+			TopAppBar(colors = TopAppBarDefaults.smallTopAppBarColors(
+				containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp),
+				titleContentColor = MaterialTheme.colorScheme.onSurface,
+				navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+			), title = { Text(stringResource(R.string.menu_about)) }, navigationIcon = {
+				IconButton(onClick = { onBackButtonPressed() }) {
+					Icon(Icons.Default.ArrowBack, "")
 				}
+			})
+		}
 
-			},
-			content = { innerPadding ->
-				LazyColumn(
-					modifier = Modifier
-						.consumedWindowInsets(innerPadding)
-						.fillMaxSize()
-						.background(MaterialTheme.colorScheme.onSecondary),
-					contentPadding = innerPadding
+	}, content = { innerPadding ->
+		LazyColumn(
+			modifier = Modifier
+				.consumedWindowInsets(innerPadding)
+				.fillMaxSize()
+				.background(MaterialTheme.colorScheme.onSecondary),
+			contentPadding = innerPadding
+		) {
+			items(AboutItems) { it ->
+				AboutPageItem(
+					stringResource(it.title), it.subtitle, painterResource(id = it.icon)
 				) {
-					items(AboutItems) { it ->
-						AboutPageItem(
-							stringResource(it.title),
-							it.subtitle,
-							painterResource(id = it.icon)
-						) {
-							val intent =
-								Intent(Intent.ACTION_VIEW, Uri.parse(it.url))
-							context.startActivity(intent)
-						}
-					}
+					val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.url))
+					context.startActivity(intent)
 				}
 			}
-		)
-	}
+		}
+	})
+
 }
 
