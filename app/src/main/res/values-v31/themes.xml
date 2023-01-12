@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<style name="Theme.VerText" parent="Theme.Material3.DynamicColors.Light">
+		<item name="preferenceTheme">@style/Theme.VerTextPreferences</item>
+		<item name="alertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+		<item name="dialogCornerRadius">18dp</item>
+
+		<item name="android:windowSplashScreenIconBackgroundColor">@color/primary</item>
+	</style>
+</resources>
